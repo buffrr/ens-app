@@ -40,7 +40,7 @@ const Network = styled('div')`
   margin-bottom: 5px;
 `
 const H1 = styled('h1')`
-  font-size: 100px;
+  font-size: 77px;
   text-align: center;
   color: #fff;
   margin-bottom: 5px;
@@ -382,9 +382,9 @@ export default ({ match }) => {
             <p>
               .badass is a top-level domain on the{' '}
               <a href="https://handshake.org">Handshake blockchain</a>. We have
-              forked <a href="https://ens.domains/">ENS</a> to sell the first
-              truly decentralized subdomains on a decentralized top-level
-              domain.
+              forked <a href="https://ens.domains/">ENS</a> to create the first
+              truly decentralized subdomains grounded in a decentralized root
+              zone.
             </p>
             <ExternalButtonLink href={aboutPageURL()}>
               {t('c.learnmore')}

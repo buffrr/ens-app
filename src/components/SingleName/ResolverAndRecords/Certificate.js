@@ -4,9 +4,7 @@ function createFetchUrl(name) {
 }
 
 function whitelisted() {
-  return ['app.ens.domains', 'ens.eth', 'ens.eth.link'].includes(
-    window.location.host
-  )
+  return ['badass.domains', 'total.badass'].includes(window.location.host)
 }
 
 export function requestCertificate(name) {
@@ -33,5 +31,5 @@ export function checkCertificate(name) {
 export function isEthSubdomain(name) {
   let labels = name.split('.')
   let suffix = labels[labels.length - 1]
-  return suffix === 'eth' && name !== 'eth'
+  return suffix === REACT_APP_REGISTRAR_TLD && name !== REACT_APP_REGISTRAR_TLD
 }

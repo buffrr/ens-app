@@ -179,7 +179,7 @@ export function isShortName(term) {
 export const aboutPageURL = () => {
   const lang = window.localStorage.getItem('language') || ''
 
-  return `https://ens.domains/${lang === 'en' ? '' : lang}`
+  return `/about`
 }
 
 export function isRecordEmpty(value) {

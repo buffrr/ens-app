@@ -3,7 +3,7 @@ import styled from '@emotion/styled/macro'
 import { Link } from 'react-router-dom'
 import mq from 'mediaQuery'
 
-import ENSLogo from '../assets/ensIconLogo.svg'
+import ENSLogo from '../assets/iconLogo.svg'
 import LogoTyped from '../assets/TypeLogo'
 
 const IconLogo = styled('img')`
@@ -28,8 +28,7 @@ const LogoContainer = styled(Link)`
 
 const Logo = ({ color, className, to = '' }) => (
   <LogoContainer className={className} to={to}>
-    <IconLogo src={ENSLogo} />
-    <LogoTyped color={color} />
+    badass.domains
   </LogoContainer>
 )
 
