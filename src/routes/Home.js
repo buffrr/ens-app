@@ -18,7 +18,6 @@ import TextBubbleDefault from '../components/Icons/TextBubble'
 import QuestionMarkDefault from '../components/Icons/QuestionMark'
 import HowToUseDefault from '../components/HowToUse/HowToUse'
 import Alice from '../components/HomePage/Alice'
-import ENSLogo from '../components/HomePage/images/ENSLogo.svg'
 import { aboutPageURL } from '../utils/utils'
 import { connect, disconnect } from '../api/web3modal'
 
@@ -40,6 +39,13 @@ const NoAccounts = styled(NoAccountsDefault)``
 const Network = styled('div')`
   margin-bottom: 5px;
 `
+const H1 = styled('h1')`
+  font-size: 100px;
+  text-align: center;
+  color: #fff;
+  margin-bottom: 5px;
+`
+
 const Name = styled('span')`
   margin-left: 5px;
   text-transform: none;
@@ -356,11 +362,7 @@ export default ({ match }) => {
         </HeroTop>
         <SearchContainer>
           <>
-            <LogoLarge
-              initial={animation.initial}
-              animate={animation.animate}
-              src={ENSLogo}
-            />
+            <H1>.badass domains</H1>
             <PermanentRegistrarLogo
               initial={animation.initial}
               animate={animation.animate}
@@ -377,7 +379,13 @@ export default ({ match }) => {
               <TextBubble color="#2B2B2B" />
               {t('home.whatisens.title')}
             </H2>
-            <p>{t('home.whatisens.body')}</p>
+            <p>
+              .badass is a top-level domain on the{' '}
+              <a href="https://handshake.org">Handshake blockchain</a>. We have
+              forked <a href="https://ens.domains/">ENS</a> to sell the first
+              truly decentralized subdomains on a decentralized top-level
+              domain.
+            </p>
             <ExternalButtonLink href={aboutPageURL()}>
               {t('c.learnmore')}
             </ExternalButtonLink>

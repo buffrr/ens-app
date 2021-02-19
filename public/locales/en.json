@@ -131,7 +131,7 @@
       "title": "How to use ENS"
     },
     "whatisens": {
-      "body": "The Ethereum Name Service is a distributed, open, and extensible naming system based on the Ethereum blockchain. ENS eliminates the need to copy or type long addresses.",
+      "body": ".badass is a top-level domain on the Handshake blockchain.  We have forked ENS to sell the first truly decentralized subdomains on a decentralized top-level domain.",
       "title": "What it is"
     }
   },
@@ -240,7 +240,7 @@
   },
   "search": {
     "button": "Search",
-    "placeholder": "Search names or addresses"
+    "placeholder": "Search names"
   },
   "searchErrors": {
     "domainMalformed": {
