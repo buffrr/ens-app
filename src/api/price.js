@@ -32,7 +32,10 @@ function getContract(network) {
 export default async function getEtherPrice() {
   try {
     const network = await getNetworkId()
-    const networkProvider = getNetworkProviderUrl(`${network}`)
+    const networkProvider = getNetworkProviderUrl(
+      `${network}`,
+      process.env.REACT_APP_INFURA_ID
+    )
     const provider = new ethers.providers.JsonRpcProvider(networkProvider)
 
     const ethUsdContract = new ethers.Contract(

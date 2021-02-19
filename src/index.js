@@ -9,6 +9,7 @@ import './i18n'
 import { handleNetworkChange } from './utils/utils'
 
 window.addEventListener('load', async () => {
+  console.log('app config', process.env)
   const { client, networkId } = await handleNetworkChange()
   ReactDOM.render(
     <Suspense fallback={null}>

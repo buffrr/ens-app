@@ -58,7 +58,10 @@ async function getParent(name) {
 async function getRegistrarEntry(name) {
   const registrar = getRegistrar()
   const nameArray = name.split('.')
-  if (nameArray.length > 3 || nameArray[1] !== 'badass') {
+  if (
+    nameArray.length > 3 ||
+    nameArray[1] !== process.env.REACT_APP_REGISTRAR_TLD
+  ) {
     return {}
   }
 
@@ -172,8 +175,12 @@ function adjustForShortNames(node) {
   const nameArray = node.name.split('.')
   const { label, parent } = node
 
-  // return original node if is subdomain or not eth
-  if (nameArray.length > 2 || parent !== 'badass' || label.length > 6)
+  // return original node if is subdomain or not TLD
+  if (
+    nameArray.length > 2 ||
+    parent !== process.env.REACT_APP_REGISTRAR_TLD ||
+    label.length > 6
+  )
     return node
 
   //if the auctions are over
@@ -377,7 +384,11 @@ const resolvers = {
       }
 
       async function calculateIsPublicResolverReady() {
-        const publicResolver = '0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41' //await ens.getAddress('resolver.eth')
+        const publicResolver =
+          process.env.REACT_APP_TLD_RESOLVER ||
+          (await ens.getAddress(
+            'resolver.' + proces.env.REACT_APP_REGISTRAR_TLD
+          ))
         return !OLD_RESOLVERS.map(a => a.toLowerCase()).includes(publicResolver)
       }
 

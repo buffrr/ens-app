@@ -99,9 +99,10 @@ export default function RegistryMigration({
           : dnssecmode
           ? dnssecMigrateMessage
           : defaultMessage}
-        {domain.parent !== 'eth' && !dnssecmode && (
-          <SubWarning>{t('registrymigration.donotaccept')}</SubWarning>
-        )}
+        {domain.parent !== process.env.REACT_APP_REGISTRAR_TLD &&
+          !dnssecmode && (
+            <SubWarning>{t('registrymigration.donotaccept')}</SubWarning>
+          )}
       </WarningContent>
       {pending && !confirmed && txHash ? (
         <PendingTx

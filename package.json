@@ -15,7 +15,7 @@
     "@ensdomains/address-encoder": "^0.2.6",
     "@ensdomains/mock": "^2.0.34",
     "@ensdomains/react-ens-address": "^0.0.27",
-    "@ensdomains/ui": "^3.0.58",
+    "@ensdomains/ui": "https://github.com/hnsfund/ui.git",
     "apollo-cache-inmemory": "^1.2.9",
     "apollo-client": "^2.4.5",
     "apollo-link": "^1.2.2",
@@ -85,7 +85,8 @@
     "cypress:run:ipfs": "yarn preTest && start-server-and-test start:test:ipfs http://localhost:3000 cypress:record:ipfs",
     "cypress:ci": "start-server-and-test start:test http://localhost:3000 cypress:record",
     "cypress:ci:ipfs": "/bin/sh -c 'if [ \"$TRAVIS_PULL_REQUEST\" = \"true\" ]; then yarn cypress:run:ipfs; else yarn cypress:run:ipfs; fi'",
-    "deploy:dev": "npm run build && npm run postbuild && surge build ensappdev.surge.sh",
+    "deploy:dev": "REACT_APP_STAGE=production rm -rf build/ && npm run build && npm run postbuild && surge build badassdev.surge.sh",
+    "deploy:test": "REACT_APP_STAGE=production rm -rf build/ && npm run build && npm run postbuild && surge build badasstester.surge.sh",
     "deploy": "npm run build && npm run postbuild && surge build app.ens.domains",
     "i18n": "sync-i18n --files 'public/locales/*.json' --primary en --languages cn --space 2",
     "check-i18n": "npm run i18n -- --check"

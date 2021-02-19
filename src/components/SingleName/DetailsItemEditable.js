@@ -174,7 +174,7 @@ function getMessages({ keyName, parent, deedOwner, isDeedOwner, t }) {
   let [newValue, newType] = getDefaultMessage(keyName, t)
   if (
     keyName === 'Owner' &&
-    parent === 'eth' &&
+    parent === process.env.REACT_APP_REGISTRAR_TLD &&
     parseInt(deedOwner, 16) !== 0
   ) {
     newValue = t('singleName.messages.noresolver')

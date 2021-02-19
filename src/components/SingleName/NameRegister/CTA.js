@@ -200,7 +200,7 @@ function getCTA({
           css={css`
             margin-right: 20px;
           `}
-          name={`${label}.eth`}
+          name={`${label}.${process.env.REACT_APP_REGISTRAR_TLD}`}
           startDatetime={moment()
             .utc()
             .add(duration, 'seconds')
@@ -210,7 +210,9 @@ function getCTA({
           data-testid="manage-name-button"
           onClick={async () => {
             await Promise.all([refetch(), refetchIsMigrated()])
-            history.push(`/name/${label}.eth`)
+            history.push(
+              `/name/${label}.${process.env.REACT_APP_REGISTRAR_TLD}`
+            )
           }}
         >
           <Pencil />

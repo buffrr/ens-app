@@ -67,7 +67,6 @@ const resolvers = {
     async register(_, { label, duration, secret }) {
       const registrar = getRegistrar()
       const tx = await registrar.register(label, duration, secret)
-
       return sendHelper(tx)
     },
     async reclaim(_, { name, address }) {
@@ -100,12 +99,14 @@ const resolvers = {
         }
 
         if (modeNames[state] === 'Owned') {
-          owner = await ens.getOwner(`${name}.badass`)
+          owner = await ens.getOwner(
+            `${name}.${process.env.REACT_APP_REGISTRAR_TLD}`
+          )
         }
 
         const data = {
           domainState: {
-            name: `${name}.badass`,
+            name: `${name}.${process.env.REACT_APP_REGISTRAR_TLD}`,
             state: modeNames[state],
             registrationDate,
             revealDate,

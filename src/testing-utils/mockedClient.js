@@ -6,7 +6,7 @@ const defaultMocks = {
     //subDomainState = () => [],
     domainState() {
       return {
-        name: 'vitalik.eth',
+        name: 'vitalik.' + process.env.REACT_APP_REGISTRAR_TLD,
         state: 'Forbidden',
         __typename: 'NodeState'
       }

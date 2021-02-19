@@ -4,7 +4,7 @@ const typeDefs = `
     accounts: [String]
   }
 
-  enum TransactionMode{
+  enum TransactionMode {
     Pending
     Confirmed
   }

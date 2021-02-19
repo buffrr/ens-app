@@ -23,6 +23,21 @@ yarn start:ipfs
 
 The main difference of the ipfs-build is that it uses HashRouter instead of BrowserRouter and makes sure all links are relative.
 
+## Config Variables
+
+in your .env file at project base directory you need all of these variables defined:
+
+```
+REACT_APP_GRAPH_NODE_URI={URL to subgraph provider e.g.https://api.thegraph.com/subgraphs/name/kibagateaux/badassens}
+REACT_APP_ENS_ADDRESS={ETH address of ENS registry}
+REACT_APP_REGISTRAR={ETH address to contract that stores SLD ownership info and issue NFTs}
+REACT_APP_REGISTRAR_CONTROLLER={ETH address to contract that implements registration and sale of domains}
+REACT_APP_TLD_RESOLVER={ETH address to resolver for the TLD}
+
+REACT_APP_REGISTRAR_TLD={TLD to manage/register/renew SLDs for e.g. badass}
+REACT_APP_INFURA_ID={Your infura id}
+```
+
 ## Unit Testing
 
 All tests are run with Jest for both the front-end application and testing blockchain functionality. For blockchain based tests it uses `ganache-cli` by default. If you want to see the transactions in the Ganache GUI, you can change the environment in the test file from `GANACHE_CLI` to `GANACHE`. Then you can open Ganache on your computer and test manually after the test runner deploys the contracts.

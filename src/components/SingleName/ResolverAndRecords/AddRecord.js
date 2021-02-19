@@ -413,7 +413,7 @@ function Editable({
                   <Button
                     data-testid="save-record"
                     onClick={() => {
-                      console.log(isValid, 'inside save button')
+                      console.log(isValid, 'is valid record to save?')
                       if (isValid) {
                         saveRecord(selectedRecord, selectedKey, newValue)
                       }

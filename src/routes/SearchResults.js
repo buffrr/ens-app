@@ -32,7 +32,7 @@ class Results extends React.Component {
       errors: []
     })
     if (_searchTerm.split('.').length === 1) {
-      searchTerm = _searchTerm + '.badass'
+      searchTerm = _searchTerm + '.' + process.env.REACT_APP_REGISTRAR_TLD
     } else {
       searchTerm = _searchTerm
     }

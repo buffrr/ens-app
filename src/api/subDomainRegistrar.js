@@ -5,7 +5,8 @@ import domains from '../constants/domains.json'
 let subDomainRegistrars = {}
 
 //const defaultAddress = '0x0b07463b30b302a98407d3e3df85ebc073b0dbd1'
-const defaultAddress = '0x82994379b1ec951c8e001dfcec2a7ce8f4f39b97'
+// const defaultAddress = '0x82994379b1ec951c8e001dfcec2a7ce8f4f39b97'
+const defaultAddress = process.env.REACT_APP_REGISTRAR_CONTROLLER
 
 const getSubDomainRegistrar = async address => {
   const provider = await getProvider()
