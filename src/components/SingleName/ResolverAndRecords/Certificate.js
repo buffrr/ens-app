@@ -31,5 +31,5 @@ export function checkCertificate(name) {
 export function isEthSubdomain(name) {
   let labels = name.split('.')
   let suffix = labels[labels.length - 1]
-  return suffix === REACT_APP_REGISTRAR_TLD && name !== REACT_APP_REGISTRAR_TLD
+  return suffix === 'badass' && name !== 'badass'
 }
