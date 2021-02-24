@@ -37,21 +37,19 @@ class Results extends React.Component {
       searchTerm = _searchTerm
     }
     const type = await parseSearchTerm(searchTerm)
-    // if (!['unsupported', 'invalid', 'short'].includes(type)) {
-    parsed = validateName(searchTerm)
-    this.setState({
-      parsed
-    })
-    // }
+    if (!['unsupported', 'invalid', 'short'].includes(type)) {
+      parsed = validateName(searchTerm)
+      this.setState({
+        parsed
+      })
+    }
     document.title = `ENS Search: ${searchTerm}`
 
-    /*if (type === 'unsupported') {
+    if (type === 'unsupported') {
       this.setState({
         errors: ['unsupported']
       })
-    } else*/ if (
-      type === 'short'
-    ) {
+    } else if (type === 'short') {
       this.setState({
         errors: ['tooShort']
       })

@@ -871,7 +871,11 @@ const resolvers = {
 
       // get public resolver
       try {
-        const publicResolver = '0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41' //await ens.getAddress('resolver.eth')
+        const publicResolver =
+          process.env.REACT_APP_TLD_RESOLVER ||
+          (await ens.getAddress(
+            'resolver.' + proces.env.REACT_APP_REGISTRAR_TLD
+          ))
         const resolver = await ens.getResolver(name)
         const isOldContentResolver = calculateIsOldContentResolver(resolver)
 
