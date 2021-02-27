@@ -253,7 +253,6 @@ export const GET_REGISTRATIONS_SUBGRAPH = gql`
           labelName
           labelhash
           name
-          isMigrated
           parent {
             name
           }
@@ -289,7 +288,6 @@ export const GET_DOMAINS_SUBGRAPH = gql`
         labelName
         labelhash
         name
-        isMigrated
         parent {
           name
         }

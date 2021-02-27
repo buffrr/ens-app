@@ -405,9 +405,7 @@ const resolvers = {
       return resolverMigrationInfo
     },
     isMigrated: async (_, { name }, { cache }) => {
-      const ens = getENS()
-      let result = await ens.isMigrated(name)
-      return result
+      return true
     },
     isContractController: async (_, { address }, { cache }) => {
       let provider = await getWeb3()

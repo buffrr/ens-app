@@ -81,13 +81,11 @@ export default function ChildDomainItem({
   const smallBP = useMediaMin('small')
   const isDecrypted = checkIsDecrypted(name)
   let label = isDecrypted ? `${name}` : truncateUndecryptedName(name)
-  if (isMigrated === false)
-    label = label + ` (${t('childDomainItem.notmigrated')})`
   return (
     <DomainLink
       showBlockies={showBlockies}
       data-testid={`${name}`}
-      warning={isMigrated === false ? true : false}
+      warning={false}
       key={name}
       to={`/name/${name}`}
     >
