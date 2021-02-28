@@ -131,6 +131,9 @@ function AddReverseRecord({ account, currentAddress }) {
     options = _.uniq(
       resolvers
         .map(r => {
+          if (r.domain == null) {
+            return null
+          }
           if (checkIsDecrypted(r.domain.name)) {
             return r.domain.name
           } else {
