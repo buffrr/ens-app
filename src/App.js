@@ -15,7 +15,6 @@ import SearchResults from './routes/SearchResults'
 import SingleName from './routes/SingleName'
 import Favourites from './routes/Favourites'
 import Faq from './routes/Faq'
-import About from './routes/About'
 import Address from './routes/AddressPage'
 import Renew from './routes/Renew'
 import Modal from './components/Modal/Modal'
@@ -90,7 +89,6 @@ const App = ({ initialClient, initialNetworkId }) => {
                     <Route path="/test-registrar" component={TestRegistrar} />
                     <Route path="/favourites" component={Favourites} />
                     <Route path="/faq" component={Faq} />
-                    <Route path="/about" component={About} />
                     <Route path="/my-bids" component={SearchResults} />
                     <Route path="/how-it-works" component={SearchResults} />
                     <Route

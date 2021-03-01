@@ -179,7 +179,7 @@ export function isShortName(term) {
 export const aboutPageURL = () => {
   const lang = window.localStorage.getItem('language') || ''
 
-  return `/about`
+  return `https://medium.com/@ca98am79/introducing-badass-domains-4d90bd48108b`
 }
 
 export function isRecordEmpty(value) {
