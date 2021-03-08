@@ -59,7 +59,7 @@ const Section = ({ question, children }) => {
 function Faq() {
   const { t } = useTranslation()
   useEffect(() => {
-    document.title = 'ENS Faq'
+    document.title = '.badass Faq'
   }, [])
 
   return (
@@ -73,6 +73,14 @@ function Faq() {
         subdomain].badass will completely own their name on Ethereum. The
         top-level domain .badass has been locked (with no owner), but anyone can
         renew it.
+      </Section>
+
+      <Section question="How do I register a .badass domain?">
+        We have created a{' '}
+        <a href="https://medium.com/@ca98am79/step-by-step-guide-to-registering-a-badass-name-39c3cc38c7a5">
+          step-by-step guide to registering .badass domains here
+        </a>
+        .
       </Section>
 
       <Section question="Can I use a .badass name for my website?">

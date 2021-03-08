@@ -43,7 +43,7 @@ class Results extends React.Component {
         parsed
       })
     }
-    document.title = `ENS Search: ${searchTerm}`
+    document.title = `.badass Search: ${searchTerm}`
 
     if (type === 'unsupported') {
       this.setState({
