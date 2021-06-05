@@ -69,6 +69,12 @@ export const GET_TEXT_RECORDS = gql`
   }
 `
 
+export const GET_DNS_RECORDS = gql`
+  query getDNSRecords($name: String, $types: [String]) {
+    getDNSRecords(name: $name, types: $types) @client
+  }
+`
+
 export const GET_SINGLE_NAME = gql`
   query singleName($name: String) {
     singleName(name: $name) @client {

@@ -12,11 +12,15 @@ import {
   labelhash,
   utils
 } from '@ensdomains/ui'
+
+import bns from 'bns'
 import { formatsByName } from '@ensdomains/address-encoder'
 import isEqual from 'lodash/isEqual'
 import modeNames from '../modes'
 import { sendHelper, sendHelperArray } from '../resolverUtils'
 import { emptyAddress, DNSREGISTRAR_ADDRESS } from '../../utils/utils'
+import { strRecord } from '../../utils/dns'
+
 import TEXT_RECORD_KEYS from 'constants/textRecords'
 import COIN_LIST_KEYS from 'constants/coinList'
 import {
@@ -367,6 +371,7 @@ const resolvers = {
         )
         DEPRECATED_RESOLVERS = [...DEPRECATED_RESOLVERS, ...localResolvers]
       }
+
       /* Deprecated resolvers are using the new registry and can be continued to be used*/
 
       function calculateIsDeprecatedResolver(address) {
@@ -481,6 +486,33 @@ const resolvers = {
         ens.getAddr(name, key).then(addr => ({ key, value: addr }))
       )
       return Promise.all(addresses)
+    },
+    getDNSRecords: async (_, { name, types }) => {
+      const ens = getENS()
+      const dnsRecords = types.map(key =>
+        ens.getDNSRecordsZoneFormat(name, name, key).then(records => {
+          let value = ''
+          if (records.length === 0) {
+            return { key, value: value }
+          }
+
+          const record = records[0]
+          const rr = bns.wire.Record.fromString(record)
+
+          if (rr.type === bns.wire.types.TXT && rr.data.txt.length === 1) {
+            value = rr.data.txt[0]
+          } else {
+            value = record
+              .trim()
+              .split(/[\s]+/)
+              .slice(4)
+              .join(' ')
+          }
+
+          return { key, value: value }
+        })
+      )
+      return Promise.all(dnsRecords)
     },
     getTextRecords: async (_, { name, keys }) => {
       const ens = getENS()
@@ -603,6 +635,33 @@ const resolvers = {
     },
     addMultiRecords: async (_, { name, records }, { cache }) => {
       const ens = getENS()
+
+      // Handling DNS Records
+      try {
+        if (records.dnsRecords.length > 0) {
+          if (records.textRecords.length > 0 || records.coins.length > 0) {
+            console.warn(
+              'dns records cannot be modified with other types of records'
+            )
+            return
+          }
+
+          const defaultTTL = '43200'
+          let owner = name + '.'
+          const strRecords = []
+
+          for (const record of records.dnsRecords) {
+            const rr = strRecord(owner, defaultTTL, record.key, record.value)
+            strRecords.push(rr)
+          }
+
+          const tx = await ens.setDNSRecordsFromZone(name, strRecords)
+          return sendHelper(tx)
+        }
+      } catch (e) {
+        console.log('unable to perform dns transaction', e)
+        return
+      }
 
       function setupTransactions({ name, records, resolverInstance }) {
         try {

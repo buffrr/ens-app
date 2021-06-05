@@ -64,6 +64,7 @@
     "set": "Set",
     "sync": "Sync",
     "textrecord": "Text Record",
+    "dnsrecord": "DNS Record",
     "transfer": "Transfer",
     "warning": "Warning",
     "year": "year",
