@@ -1,6 +1,20 @@
 import { encodeContenthash, isValidContenthash } from '@ensdomains/ui'
 import { addressUtils } from 'utils/utils'
+import { normalizeTXT, strRecord } from './dns'
 import { formatsByName } from '@ensdomains/address-encoder'
+import bns from 'bns'
+
+export function validateDNSInput(type, value) {
+  if (value === '') return true
+
+  const record = strRecord('example.eth.', '0', type, value)
+  try {
+    bns.wire.Record.fromString(record)
+    return true
+  } catch (e) {
+    return false
+  }
+}
 
 export function validateRecord({ type, value, contentType, selectedKey }) {
   if (!type) return false
@@ -23,6 +37,8 @@ export function validateRecord({ type, value, contentType, selectedKey }) {
       }
     case 'textRecords':
       return true
+    case 'dnsRecords':
+      return validateDNSInput(selectedKey, value)
     case 'coins':
       if (value === '') return false
       if (selectedKey === 'ETH') {

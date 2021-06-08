@@ -95,6 +95,24 @@ export default function MultipleRecordsCheck({
           </KeyValuesList>
         </KeyValueContainer>
       )}
+      {changedRecords.dnsRecords.length > 0 && (
+        <KeyValueContainer>
+          <Key>DNS Records</Key>
+          <KeyValuesList>
+            {changedRecords.dnsRecords.map(record =>
+              record.value === '' ? (
+                <KeyValueViewOnly
+                  textKey={record.key}
+                  value={record.value}
+                  remove={true}
+                />
+              ) : (
+                <KeyValueViewOnly textKey={record.key} value={record.value} />
+              )
+            )}
+          </KeyValuesList>
+        </KeyValueContainer>
+      )}
     </div>
   )
 }

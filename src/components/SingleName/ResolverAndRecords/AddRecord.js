@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { validateRecord } from '../../../utils/records'
 import { useEditable } from '../../hooks'
 import { getOldContentWarning } from './warnings'
+import DNS_RECORD_KEYS from 'constants/dnsRecords'
 import TEXT_RECORD_KEYS from 'constants/textRecords'
 import COIN_LIST from 'constants/coinList'
 import { getEnsAddress } from '../../../api/ens'
@@ -131,6 +132,12 @@ const textRecordOptions = TEXT_RECORD_KEYS.slice()
     label: key,
     value: key
   }))
+const dnsRecordOptions = DNS_RECORD_KEYS.slice()
+  .sort()
+  .map(key => ({
+    label: key,
+    value: key
+  }))
 const coinOptions = COIN_LIST.slice()
   .sort()
   .map(key => ({
@@ -155,6 +162,36 @@ function TextRecordInput({
         placeholder="Key"
         addNewKey={true}
         options={textRecordOptions}
+      />
+      <DetailsItemInput
+        newValue={newValue}
+        dataType={selectedRecord ? selectedRecord.value : null}
+        updateValue={updateValue}
+        isValid={isValid}
+        isInvalid={isInvalid}
+        placeholder={selectedKey ? `Enter ${selectedKey.value}` : ''}
+      />
+    </>
+  )
+}
+
+function DNSRecordInput({
+  selectedRecord,
+  updateValue,
+  newValue,
+  selectedKey,
+  setSelectedKey,
+  isValid,
+  isInvalid
+}) {
+  return (
+    <>
+      <Select
+        selectedRecord={selectedKey}
+        handleChange={setSelectedKey}
+        placeholder="Key"
+        addNewKey={true}
+        options={dnsRecordOptions}
       />
       <DetailsItemInput
         newValue={newValue}
@@ -369,6 +406,16 @@ function Editable({
               />
             ) : selectedRecord && selectedRecord.value === 'textRecords' ? (
               <TextRecordInput
+                selectedRecord={selectedRecord}
+                newValue={newValue}
+                updateValue={updateValue}
+                selectedKey={selectedKey}
+                setSelectedKey={setSelectedKey}
+                isValid={isValid}
+                isInvalid={isInvalid}
+              />
+            ) : selectedRecord && selectedRecord.value === 'dnsRecords' ? (
+              <DNSRecordInput
                 selectedRecord={selectedRecord}
                 newValue={newValue}
                 updateValue={updateValue}

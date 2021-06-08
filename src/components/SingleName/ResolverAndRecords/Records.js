@@ -6,9 +6,11 @@ import differenceWith from 'lodash/differenceWith'
 import { useQuery } from 'react-apollo'
 import { useTranslation } from 'react-i18next'
 import { getNamehash } from '@ensdomains/ui'
+import { validateDNSInput } from '../../../utils/records'
 
 import { useEditable } from '../../hooks'
 import { ADD_MULTI_RECORDS } from '../../../graphql/mutations'
+import DNS_RECORD_KEYS from 'constants/dnsRecords'
 import COIN_LIST from 'constants/coinList'
 import PendingTx from '../../PendingTx'
 import { emptyAddress } from '../../../utils/utils'
@@ -17,12 +19,14 @@ import { formatsByCoinType } from '@ensdomains/address-encoder'
 import {
   GET_ADDRESSES,
   GET_TEXT_RECORDS,
+  GET_DNS_RECORDS,
   GET_RESOLVER_FROM_SUBGRAPH
 } from 'graphql/queries'
 
 import AddRecord from './AddRecord'
 import ContentHash from './ContentHash'
 import TextRecord from './TextRecord'
+import DNSRecord from './DNSRecord'
 import Coins from './Coins'
 import DefaultSaveCancel from '../SaveCancel'
 import RecordsCheck from './RecordsCheck'
@@ -67,6 +71,10 @@ const RECORDS = [
   {
     label: 'Text',
     value: 'textRecords'
+  },
+  {
+    label: 'DNS',
+    value: 'dnsRecords'
   }
 ]
 
@@ -78,6 +86,8 @@ const TEXT_PLACEHOLDER_RECORDS = [
   'avatar',
   'notice'
 ]
+
+const DNS_PLACEHOLDER_RECORDS = ['A', 'CNAME', 'TXT']
 
 const COIN_PLACEHOLDER_RECORDS = ['ETH', ...COIN_LIST.slice(0, 3)]
 
@@ -120,12 +130,18 @@ function getChangedRecords(initialRecords, updatedRecords) {
   if (initialRecords.loading)
     return {
       textRecords: [],
+      dnsRecords: [],
       coins: []
     }
 
   const textRecords = differenceWith(
     updatedRecords.textRecords,
     initialRecords.textRecords,
+    isEqual
+  )
+  const dnsRecords = differenceWith(
+    updatedRecords.dnsRecords,
+    initialRecords.dnsRecords,
     isEqual
   )
   const coins = differenceWith(
@@ -140,6 +156,7 @@ function getChangedRecords(initialRecords, updatedRecords) {
 
   return {
     textRecords,
+    dnsRecords,
     coins,
     ...(content !== undefined && { content })
   }
@@ -148,6 +165,7 @@ function getChangedRecords(initialRecords, updatedRecords) {
 function checkRecordsHaveChanged(changedRecords) {
   return (
     changedRecords.textRecords.length > 0 ||
+    changedRecords.dnsRecords.length > 0 ||
     changedRecords.coins.length > 0 ||
     changedRecords.content
   )
@@ -158,12 +176,15 @@ function checkRecordsAreValid(changedRecords) {
     changedRecords.textRecords.filter(record => record.isValid === false)
       .length > 0
   )
-
+  const dnsRecordsValid = !(
+    changedRecords.dnsRecords.filter(record => record.isValid === false)
+      .length > 0
+  )
   const coinsValid = !(
     changedRecords.coins.filter(record => record.isValid === false).length > 0
   )
 
-  return textRecordsValid && coinsValid
+  return textRecordsValid && dnsRecordsValid && coinsValid
 }
 
 function isContentHashEmpty(hash) {
@@ -194,7 +215,8 @@ export default function Records({
   const [updatedRecords, setUpdatedRecords] = useState({
     content: undefined,
     coins: [],
-    textRecords: []
+    textRecords: [],
+    dnsRecords: []
   })
   const { actions, state } = useEditable()
   const { pending, confirmed, editing, txHash } = state
@@ -240,6 +262,17 @@ export default function Records({
     }
   )
 
+  const { loading: dnsRecordsLoading, data: dataDnsRecords } = useQuery(
+    GET_DNS_RECORDS,
+    {
+      variables: {
+        name: domain.name,
+        types: DNS_RECORD_KEYS
+      },
+      skip: !dataResolver
+    }
+  )
+
   function processRecords(records, placeholder) {
     const nonDuplicatePlaceholderRecords = placeholder.filter(
       record => !records.find(r => record === r.key)
@@ -261,6 +294,10 @@ export default function Records({
             TEXT_PLACEHOLDER_RECORDS
           )
         : processRecords([], TEXT_PLACEHOLDER_RECORDS),
+    dnsRecords:
+      dataDnsRecords && dataDnsRecords.getDNSRecords
+        ? processRecords(dataDnsRecords.getDNSRecords, DNS_PLACEHOLDER_RECORDS)
+        : processRecords([], DNS_PLACEHOLDER_RECORDS),
     coins:
       dataAddresses && dataAddresses.getAddresses
         ? processRecords(dataAddresses.getAddresses, COIN_PLACEHOLDER_RECORDS)
@@ -270,17 +307,28 @@ export default function Records({
   }
 
   useEffect(() => {
-    if (textRecordsLoading === false && addressesLoading === false) {
+    if (
+      textRecordsLoading === false &&
+      dnsRecordsLoading === false &&
+      addressesLoading === false
+    ) {
       setUpdatedRecords(initialRecords)
     }
-  }, [textRecordsLoading, addressesLoading, dataAddresses, dataTextRecords])
+  }, [
+    textRecordsLoading,
+    dnsRecordsLoading,
+    addressesLoading,
+    dataAddresses,
+    dataTextRecords,
+    dataDnsRecords
+  ])
 
   const emptyRecords = RECORDS.filter(record => {
     // Always display all options for consistency now that both Addess and text almost always have empty record
     return true
   })
 
-  const hasRecords = hasAnyRecord(domain)
+  const hasRecords = hasAnyRecord(domain) || true
 
   const changedRecords = getChangedRecords(initialRecords, updatedRecords)
   const contentCreatedFirstTime =
@@ -298,7 +346,20 @@ export default function Records({
   }
 
   const haveRecordsChanged = checkRecordsHaveChanged(changedRecords)
-  const areRecordsValid = checkRecordsAreValid(changedRecords)
+  let areRecordsValid = checkRecordsAreValid(changedRecords)
+
+  const basicRecordsChanged =
+    changedRecords.textRecords.length > 0 ||
+    changedRecords.coins > 0 ||
+    updatedRecords.content !== initialRecords.content
+
+  const dnsRecordsChanged = changedRecords.dnsRecords.length > 0
+
+  // we don't support changing DNS records with other
+  // types of records for now
+  if (dnsRecordsChanged && basicRecordsChanged) {
+    areRecordsValid = false
+  }
 
   return (
     <RecordsWrapper
@@ -352,6 +413,28 @@ export default function Records({
         title={t('c.textrecord')}
         updatedRecords={updatedRecords}
         placeholderRecords={TEXT_PLACEHOLDER_RECORDS}
+        setUpdatedRecords={setUpdatedRecords}
+        changedRecords={changedRecords}
+      />
+      <span
+        style={{
+          borderTop: '1px dashed #d3d3d3',
+          paddingTop: '20px',
+          display: 'block'
+        }}
+      />
+      <DNSRecord
+        canEdit={canEditRecords}
+        editing={editing}
+        domain={domain}
+        validator={(type, value) => {
+          return validateDNSInput(type, value)
+        }}
+        dnsRecords={dataDnsRecords && dataDnsRecords.getDNSRecords}
+        loading={dnsRecordsLoading}
+        title={t('c.dnsrecord')}
+        updatedRecords={updatedRecords}
+        placeholderRecords={DNS_PLACEHOLDER_RECORDS}
         setUpdatedRecords={setUpdatedRecords}
         changedRecords={changedRecords}
       />
