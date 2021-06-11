@@ -134,15 +134,19 @@ function getChangedRecords(initialRecords, updatedRecords) {
       coins: []
     }
 
+  const keyValueEqual = function(a, b) {
+    return a && b && a.key === b.key && a.value === b.value
+  }
+
   const textRecords = differenceWith(
     updatedRecords.textRecords,
     initialRecords.textRecords,
-    isEqual
+    keyValueEqual
   )
   const dnsRecords = differenceWith(
     updatedRecords.dnsRecords,
     initialRecords.dnsRecords,
-    isEqual
+    keyValueEqual
   )
   const coins = differenceWith(
     updatedRecords.coins,
@@ -229,6 +233,12 @@ export default function Records({
     resetPending
   } = actions
 
+  const cancelEdits = function() {
+    stopEditing()
+    // clear all uncommitted changes
+    setUpdatedRecords(initialRecords)
+  }
+
   const { data: dataResolver } = useQuery(GET_RESOLVER_FROM_SUBGRAPH, {
     variables: {
       id: getNamehash(domain.name)
@@ -243,35 +253,40 @@ export default function Records({
     resolver.coinTypes &&
     resolver.coinTypes.map(c => formatsByCoinType[c].name)
 
-  const { loading: addressesLoading, data: dataAddresses } = useQuery(
-    GET_ADDRESSES,
-    {
-      variables: { name: domain.name, keys: coinList },
-      skip: !coinList
-    }
-  )
+  const {
+    loading: addressesLoading,
+    data: dataAddresses,
+    refetch: refetchAddresses
+  } = useQuery(GET_ADDRESSES, {
+    variables: { name: domain.name, keys: coinList },
+    skip: !coinList
+  })
 
-  const { loading: textRecordsLoading, data: dataTextRecords } = useQuery(
-    GET_TEXT_RECORDS,
-    {
-      variables: {
-        name: domain.name,
-        keys: resolver && resolver.texts
-      },
-      skip: !dataResolver
-    }
-  )
+  const {
+    loading: textRecordsLoading,
+    data: dataTextRecords,
+    refetch: refetchTextRecords
+  } = useQuery(GET_TEXT_RECORDS, {
+    variables: {
+      name: domain.name,
+      keys: resolver && resolver.texts
+    },
+    skip: !dataResolver || !resolver || !resolver.texts
+  })
 
-  const { loading: dnsRecordsLoading, data: dataDnsRecords } = useQuery(
-    GET_DNS_RECORDS,
-    {
-      variables: {
-        name: domain.name,
-        types: DNS_RECORD_KEYS
-      },
-      skip: !dataResolver
-    }
-  )
+  const {
+    loading: getDnsRecordsLoading,
+    data: dataDnsRecords,
+    refetch: refetchDnsRecords
+  } = useQuery(GET_DNS_RECORDS, {
+    variables: {
+      name: domain.name,
+      types: DNS_RECORD_KEYS
+    },
+    skip: !dataResolver
+  })
+
+  const dnsRecordsLoading = getDnsRecordsLoading && dataDnsRecords
 
   function processRecords(records, placeholder) {
     const nonDuplicatePlaceholderRecords = placeholder.filter(
@@ -303,7 +318,7 @@ export default function Records({
         ? processRecords(dataAddresses.getAddresses, COIN_PLACEHOLDER_RECORDS)
         : processRecords([], COIN_PLACEHOLDER_RECORDS),
     content: isContentHashEmpty(domain.content) ? '' : domain.content,
-    loading: textRecordsLoading || addressesLoading
+    loading: textRecordsLoading || dnsRecordsLoading || addressesLoading
   }
 
   useEffect(() => {
@@ -339,7 +354,7 @@ export default function Records({
     hasRecords
   )
   const canEditRecords =
-    !isOldPublicResolver && !isDeprecatedResolver && isOwner
+    !isOldPublicResolver && !isDeprecatedResolver && isOwner && !pending
 
   if (!shouldShowRecords) {
     return null
@@ -366,7 +381,7 @@ export default function Records({
       shouldShowRecords={shouldShowRecords}
       needsToBeMigrated={needsToBeMigrated}
     >
-      {!canEditRecords && isOwner ? (
+      {!canEditRecords && !pending && isOwner ? (
         <CantEdit>{t('singleName.record.cantEdit')}</CantEdit>
       ) : (
         <AddRecord
@@ -374,7 +389,7 @@ export default function Records({
           canEdit={canEditRecords}
           editing={editing}
           startEditing={startEditing}
-          stopEditing={stopEditing}
+          stopEditing={cancelEdits}
           initialRecords={initialRecords}
           updatedRecords={updatedRecords}
           setUpdatedRecords={setUpdatedRecords}
@@ -445,6 +460,18 @@ export default function Records({
             onConfirmed={() => {
               setConfirmed()
               resetPending()
+
+              // update initialRecords
+              // to prevent further edits from
+              // happening on stale data
+              if (dnsRecordsChanged) {
+                refetchDnsRecords()
+              }
+
+              if (basicRecordsChanged) {
+                refetchTextRecords()
+                refetchAddresses()
+              }
             }}
           />
         </ConfirmBox>
@@ -462,7 +489,7 @@ export default function Records({
               })
             }}
             mutationButton="Confirm"
-            stopEditing={stopEditing}
+            stopEditing={cancelEdits}
             disabled={false}
             confirm={true}
             extraDataComponent={

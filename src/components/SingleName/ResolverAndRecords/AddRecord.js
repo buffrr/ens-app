@@ -335,7 +335,7 @@ function Editable({
         {t('singleName.record.title')}
         {editing ? (
           <ToggleAddRecord onClick={stopEditing}>
-            Close Add/Edit Record
+            Cancel Add/Edit Record
           </ToggleAddRecord>
         ) : (
           <ToggleAddRecord onClick={startEditing}>
