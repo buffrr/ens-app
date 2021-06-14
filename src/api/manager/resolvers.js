@@ -19,7 +19,7 @@ import isEqual from 'lodash/isEqual'
 import modeNames from '../modes'
 import { sendHelper, sendHelperArray } from '../resolverUtils'
 import { emptyAddress, DNSREGISTRAR_ADDRESS } from '../../utils/utils'
-import { strRecord } from '../../utils/dns'
+import { serializeRecord, toDNSName } from '../../utils/dns'
 
 import TEXT_RECORD_KEYS from 'constants/textRecords'
 import COIN_LIST_KEYS from 'constants/coinList'
@@ -489,29 +489,45 @@ const resolvers = {
     },
     getDNSRecords: async (_, { name, types }) => {
       const ens = getENS()
-      const dnsRecords = types.map(key =>
-        ens.getDNSRecordsZoneFormat(name, name, key).then(records => {
-          let value = ''
-          if (records.length === 0) {
+      const dnsRecords = types.map(key => {
+        const dns = toDNSName(name, key)
+
+        return ens
+          .getDNSRecordsZoneFormat(dns.node, dns.name, dns.type)
+          .then(records => {
+            let value = ''
+            if (records.length === 0) {
+              return { key, value: value }
+            }
+
+            const record = records[0]
+            const rr = bns.wire.Record.fromString(record)
+
+            switch (rr.type) {
+              case bns.wire.types.TXT:
+                if (rr.data.txt.length === 1) value = rr.data.txt[0]
+                break
+              case bns.wire.types.TLSA:
+                value = rr.data.usage
+                value += ' ' + rr.data.selector
+                value += ' ' + rr.data.matchingType
+                value +=
+                  ' ' +
+                  Buffer.from(rr.data.certificate)
+                    .toString('hex')
+                    .toUpperCase()
+                break
+              default:
+                value = record
+                  .trim()
+                  .split(/[\s]+/)
+                  .slice(4)
+                  .join(' ')
+            }
+
             return { key, value: value }
-          }
-
-          const record = records[0]
-          const rr = bns.wire.Record.fromString(record)
-
-          if (rr.type === bns.wire.types.TXT && rr.data.txt.length === 1) {
-            value = rr.data.txt[0]
-          } else {
-            value = record
-              .trim()
-              .split(/[\s]+/)
-              .slice(4)
-              .join(' ')
-          }
-
-          return { key, value: value }
-        })
-      )
+          })
+      })
       return Promise.all(dnsRecords)
     },
     getTextRecords: async (_, { name, keys }) => {
@@ -651,7 +667,12 @@ const resolvers = {
           const strRecords = []
 
           for (const record of records.dnsRecords) {
-            const rr = strRecord(owner, defaultTTL, record.key, record.value)
+            const rr = serializeRecord(
+              owner,
+              defaultTTL,
+              record.key,
+              record.value
+            )
             strRecords.push(rr)
           }
 

@@ -87,8 +87,6 @@ const TEXT_PLACEHOLDER_RECORDS = [
   'notice'
 ]
 
-const DNS_PLACEHOLDER_RECORDS = ['A', 'CNAME', 'TXT']
-
 const COIN_PLACEHOLDER_RECORDS = ['ETH', ...COIN_LIST.slice(0, 3)]
 
 function isEmpty(record) {
@@ -311,8 +309,8 @@ export default function Records({
         : processRecords([], TEXT_PLACEHOLDER_RECORDS),
     dnsRecords:
       dataDnsRecords && dataDnsRecords.getDNSRecords
-        ? processRecords(dataDnsRecords.getDNSRecords, DNS_PLACEHOLDER_RECORDS)
-        : processRecords([], DNS_PLACEHOLDER_RECORDS),
+        ? processRecords(dataDnsRecords.getDNSRecords, DNS_RECORD_KEYS)
+        : processRecords([], DNS_RECORD_KEYS),
     coins:
       dataAddresses && dataAddresses.getAddresses
         ? processRecords(dataAddresses.getAddresses, COIN_PLACEHOLDER_RECORDS)
@@ -449,7 +447,7 @@ export default function Records({
         loading={dnsRecordsLoading}
         title={t('c.dnsrecord')}
         updatedRecords={updatedRecords}
-        placeholderRecords={DNS_PLACEHOLDER_RECORDS}
+        placeholderRecords={DNS_RECORD_KEYS}
         setUpdatedRecords={setUpdatedRecords}
         changedRecords={changedRecords}
       />
