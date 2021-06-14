@@ -13,9 +13,22 @@ export function normalizeTXT(txt) {
   return txt
 }
 
-export function strRecord(name, ttl, type, value) {
+export function serializeRecord(name, ttl, type, value) {
+  name = bns.util.fqdn(name)
+
   if (type === 'TXT' && value !== '') value = normalizeTXT(value)
   if (type === 'CNAME' && value !== '') value = bns.util.fqdn(value)
+  const dns = toDNSName(name, type)
 
-  return name + ' ' + ttl + ' IN ' + type + ' ' + value
+  return dns.name + ' ' + ttl + ' IN ' + dns.type + ' ' + value
+}
+
+export function toDNSName(node, type) {
+  let name = node
+  if (type === 'TLSA (443, tcp)') {
+    type = 'TLSA'
+    name = '_443._tcp.' + name
+  }
+
+  return { node, name, type }
 }
