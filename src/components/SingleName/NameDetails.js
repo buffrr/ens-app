@@ -701,21 +701,21 @@ function NameDetails({
         }}
       />
 
-      <Route
-        exact
-        path="/name/:name/subdomains"
-        render={() => (
-          <SubDomains
-            domain={domain}
-            isOwner={isOwner}
-            data-testid="subdomains"
-            isMigratedToNewRegistry={isMigratedToNewRegistry}
-            loadingIsMigrated={loadingIsMigrated}
-            isParentMigratedToNewRegistry={isParentMigratedToNewRegistry}
-            loadingIsParentMigrated={loadingIsParentMigrated}
-          />
-        )}
-      />
+      {/*<Route*/}
+      {/*  exact*/}
+      {/*  path="/name/:name/subdomains"*/}
+      {/*  render={() => (*/}
+      {/*    <SubDomains*/}
+      {/*      domain={domain}*/}
+      {/*      isOwner={isOwner}*/}
+      {/*      data-testid="subdomains"*/}
+      {/*      isMigratedToNewRegistry={isMigratedToNewRegistry}*/}
+      {/*      loadingIsMigrated={loadingIsMigrated}*/}
+      {/*      isParentMigratedToNewRegistry={isParentMigratedToNewRegistry}*/}
+      {/*      loadingIsParentMigrated={loadingIsParentMigrated}*/}
+      {/*    />*/}
+      {/*  )}*/}
+      {/*/>*/}
 
       <Route
         exact
