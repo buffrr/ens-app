@@ -55,29 +55,29 @@ export default function Sorting({
       </SortButton> */}
       {activeFilter === 'registrant' && (
         <SortButton
-          className={activeSort.type === 'expiryDate' ? 'active' : ''}
+          className={activeSort.type === 'registration' ? 'active' : ''}
           onClick={() => {
             if (activeSort.type) {
               if (activeSort.direction === 'asc') {
                 setActiveSort({
-                  type: 'expiryDate',
+                  type: 'registrationDate',
                   direction: 'desc'
                 })
               } else if (activeSort.direction === 'desc') {
                 setActiveSort({
-                  type: 'expiryDate',
+                  type: 'registrationDate',
                   direction: 'asc'
                 })
               }
               return
             }
             setActiveSort({
-              type: 'expiryDate',
+              type: 'registrationDate',
               direction: 'asc'
             })
           }}
         >
-          {t('address.sort.expiry')}
+          {t('address.sort.registration')}
         </SortButton>
       )}
     </SortContainer>

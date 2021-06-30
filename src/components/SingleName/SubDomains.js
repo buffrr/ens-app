@@ -194,7 +194,7 @@ function SubDomains({
                     <ChildDomainItem
                       showBlockies={true}
                       name={name}
-                      isMigrated={d.isMigrated}
+                      isMigrated={true}
                       owner={d.owner.id}
                       labelhash={d.labelHash}
                       isSubdomain={true}

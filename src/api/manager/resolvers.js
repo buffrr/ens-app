@@ -532,6 +532,10 @@ const resolvers = {
     },
     getTextRecords: async (_, { name, keys }) => {
       const ens = getENS()
+      if (!keys) {
+        return null
+      }
+
       const textRecords = keys.map(key =>
         ens.getText(name, key).then(addr => ({ key, value: addr }))
       )

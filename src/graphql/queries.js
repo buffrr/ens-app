@@ -159,7 +159,6 @@ export const GET_SUBDOMAINS_FROM_SUBGRAPH = gql`
         id
         labelName
         labelhash
-        isMigrated
         name
         owner {
           id
@@ -252,9 +251,7 @@ export const GET_REGISTRATIONS_SUBGRAPH = gql`
         skip: $skip
         orderBy: $orderBy
         orderDirection: $orderDirection
-        where: { expiryDate_gt: $expiryDate }
       ) {
-        expiryDate
         domain {
           labelName
           labelhash
@@ -271,7 +268,6 @@ export const GET_REGISTRATIONS_SUBGRAPH = gql`
 export const GET_REGISTRATIONS_BY_IDS_SUBGRAPH = gql`
   query getRegistrations($ids: [ID]) {
     registrations(first: 1000, where: { domain_in: $ids }) {
-      expiryDate
       domain {
         name
         owner {

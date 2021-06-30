@@ -28,7 +28,7 @@ const LogoContainer = styled(Link)`
 
 const Logo = ({ color, className, to = '' }) => (
   <LogoContainer className={className} to={to}>
-    badass.domains
+    forever.domains
   </LogoContainer>
 )
 

@@ -9,8 +9,7 @@ import {
   SET_OWNER,
   SET_SUBNODE_OWNER,
   SET_REGISTRANT,
-  RECLAIM,
-  RENEW
+  RECLAIM
 } from '../../graphql/mutations'
 import { IS_MIGRATED } from '../../graphql/queries'
 
@@ -209,7 +208,7 @@ function DetailsContainer({
   loadingIsParentMigrated
 }) {
   const { t } = useTranslation()
-  const isExpired = domain.expiryTime < new Date()
+  const isExpired = false
   const domainOwner =
     domain.available || domain.owner === '0x0' ? null : domain.owner
   const registrant =
@@ -495,43 +494,43 @@ function DetailsContainer({
         ) : (
           ''
         )}
-        {!domain.available ? (
-          domain.isNewRegistrar || domain.gracePeriodEndDate ? (
-            <>
-              <DetailsItemEditable
-                domain={domain}
-                keyName="Expiration Date"
-                value={domain.expiryTime}
-                canEdit={parseInt(account, 16) !== 0}
-                type="date"
-                editButton={t('c.renew')}
-                mutationButton={t('c.renew')}
-                mutation={RENEW}
-                refetch={refetch}
-                confirm={true}
-              />
-              {domain.gracePeriodEndDate ? (
-                <GracePeriodWarning
-                  expiryTime={domain.expiryTime}
-                  date={domain.gracePeriodEndDate}
-                />
-              ) : (
-                ''
-              )}
-            </>
-          ) : domain.expiryTime ? (
-            <DetailsItem uneditable>
-              <DetailsKey>{t("c['Expiration Date']")}</DetailsKey>
-              <ExpirationDetailsValue isExpired={isExpired}>
-                {formatDate(domain.expiryTime)}
-              </ExpirationDetailsValue>
-            </DetailsItem>
-          ) : (
-            ''
-          )
-        ) : (
-          ''
-        )}
+        {/*{!domain.available ? (*/}
+        {/*  domain.isNewRegistrar || domain.gracePeriodEndDate ? (*/}
+        {/*    <>*/}
+        {/*      <DetailsItemEditable*/}
+        {/*        domain={domain}*/}
+        {/*        keyName="Expiration Date"*/}
+        {/*        value={domain.expiryTime}*/}
+        {/*        canEdit={parseInt(account, 16) !== 0}*/}
+        {/*        type="date"*/}
+        {/*        editButton={t('c.renew')}*/}
+        {/*        mutationButton={t('c.renew')}*/}
+        {/*        mutation={RENEW}*/}
+        {/*        refetch={refetch}*/}
+        {/*        confirm={true}*/}
+        {/*      />*/}
+        {/*      {domain.gracePeriodEndDate ? (*/}
+        {/*        <GracePeriodWarning*/}
+        {/*          expiryTime={domain.expiryTime}*/}
+        {/*          date={domain.gracePeriodEndDate}*/}
+        {/*        />*/}
+        {/*      ) : (*/}
+        {/*        ''*/}
+        {/*      )}*/}
+        {/*    </>*/}
+        {/*  ) : domain.expiryTime ? (*/}
+        {/*    <DetailsItem uneditable>*/}
+        {/*      <DetailsKey>{t("c['Expiration Date']")}</DetailsKey>*/}
+        {/*      <ExpirationDetailsValue isExpired={isExpired}>*/}
+        {/*        {formatDate(domain.expiryTime)}*/}
+        {/*      </ExpirationDetailsValue>*/}
+        {/*    </DetailsItem>*/}
+        {/*  ) : (*/}
+        {/*    ''*/}
+        {/*  )*/}
+        {/*) : (*/}
+        {/*  ''*/}
+        {/*)}*/}
       </OwnerFields>
       <HR />
       <ResolverAndRecords

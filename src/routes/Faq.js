@@ -59,7 +59,7 @@ const Section = ({ question, children }) => {
 function Faq() {
   const { t } = useTranslation()
   useEffect(() => {
-    document.title = '.badass Faq'
+    document.title = '.forever Faq'
   }, [])
 
   return (
@@ -67,26 +67,26 @@ function Faq() {
       <Title>FAQ</Title>
       <H2>Before You register</H2>
       <Section question="What is this?">
-        .badass is the first Handshake top-level domain to offer decentralized
+        .forever is the first Handshake top-level domain to offer decentralized
         subdomains. It was created by{' '}
         <a href="https://impervious.com">Impervious</a>. Owners of [any
-        subdomain].badass will completely own their name on Ethereum. The
-        top-level domain .badass has been locked (with no owner), but anyone can
-        renew it.
+        subdomain].forever will completely own their name on Ethereum. The
+        top-level domain .forever has been locked (with no owner), but anyone
+        can renew it.
       </Section>
 
-      <Section question="How do I register a .badass domain?">
+      <Section question="How do I register a .forever domain?">
         We have created a{' '}
         <a href="https://medium.com/@ca98am79/step-by-step-guide-to-registering-a-badass-name-39c3cc38c7a5">
-          step-by-step guide to registering .badass domains here
+          step-by-step guide to registering .forever domains here
         </a>
         .
       </Section>
 
-      <Section question="Can I use a .badass name for my website?">
+      <Section question="Can I use a .forever name for my website?">
         Yes, by using DNS servers that resolve the Handshake root zone and also
-        a resolver for ENS names on Handshake, you can build websites on .badass
-        domains.
+        a resolver for ENS names on Handshake, you can build websites on
+        .forever domains.
       </Section>
 
       <Section question="What is the maximum length of a name I can register?">
@@ -99,22 +99,22 @@ function Faq() {
         Names are about $45 a year (paid in ETH).
       </Section>
 
-      <Section question="How much gas does it cost to register and renew?">
+      <Section question="How much gas does it cost to register?">
         It depends on the gas price. You can check the historical registration
-        and renewal transaction costs
+        transaction costs
         <a href="https://explore.duneanalytics.com/public/dashboards/48pBVvSxRNVjSE8Ing1uOrCtjD4r3WmV0v5KpS05">
           {' '}
           here{' '}
         </a>
         . "Transaction cost (USD)" query will tell you how much it costs to
-        register (commit + registerWithConfig) and renew.
+        register (commit + registerWithConfig).
         <br />
         Please bear in mind that "registerWithConfig" combines 3 transactions
         (register, set resolver and set eth address) hence the gas cost is
         relatively expensive.
       </Section>
 
-      <Section question="Can I register names other than .badass?">
+      <Section question="Can I register names other than .forever?">
         We have open sourced all of the software for this so that anyone can
         deploy a registry for their Handshake TLD.
       </Section>
@@ -181,17 +181,16 @@ function Faq() {
         If you click the "trash bin" icon on the address record, it will unset
         your address so that people can no longer look up your address with the
         name. You can also unset ownership of subdomains in this way, but you
-        cannot do so on ".badass" addresses. Because ‘.badass` names are
+        cannot do so on ".forever" addresses. Because ‘.forever` names are
         ERC721-compliant NFTs, you cannot transfer them to an empty address
         (0x00000...). You can transfer it to a burn address (eg: 0x00001), but
         that does not erase the fact that you used to own the name. Also, the
-        name will not become available for registration again until the
-        registration period and grace period runs out.
+        name will not become available for registration again.
       </Section>
 
       <Section question="How do I transfer my name?">
-        For a ".badass" name, transfer both the Registrant and the Controller to
-        the new Ethereum account. Since ".badass" names are ERC721 compliant
+        For a ".forever" name, transfer both the Registrant and the Controller
+        to the new Ethereum account. Since ".forever" names are ERC721 compliant
         NFTs, you can change the Registrant by simply transferring the NFT from
         any NFT compliant wallet/marketplace as well.
         <br />
@@ -215,32 +214,6 @@ function Faq() {
         <a href="https://docs.ens.domains/contract-api-reference/name-processing#how-do-i-find-the-labelhash-namehash-of-a-name">
           developer documentation page.
         </a>
-      </Section>
-
-      <H2>When you renew your registration</H2>
-
-      <Section question="How do I receive a renewal reminder?">
-        Click the "Remind me" button on the name,s page or your address page so
-        that you can set a calendar reminder or email reminder. Note that you
-        have to set calendar reminders per name, whereas you only need to set
-        email reminders per the address of the owner. Also note that you can
-        register a name for multiple years, removing the need to renew each
-        year.
-      </Section>
-
-      <Section question="What happens if I forget to renew a name?">
-        After your name expires, there is a 90 day grace period in which the
-        owner can't edit the records but can still renew the name. After the
-        grace period, the name is released for registration by anyone with a
-        temporary premium which decreases over a 28 days period. The released
-        name continues to resolve your ETH address until the new owner
-        overwrites it.
-      </Section>
-
-      <Section question="I lost access to the Ethereum account that owns a name I registered. Can I still renew it?">
-        Any Ethereum account can pay to renew any ENS name, though doing so from
-        an account that, s not the owner will not change ownership of the name.
-        Just go to the name,s page and click "Renew".
       </Section>
     </FaqContainer>
   )

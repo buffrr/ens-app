@@ -21,7 +21,6 @@ import DefaultEtherScanLink from '../Links/EtherScanLink'
 import { getEtherScanAddr } from '../../utils/utils'
 import { calculateIsExpiredSoon } from '../../utils/dates'
 import DomainList from './DomainList'
-import RenewAll from './RenewAll'
 import Sorting from './Sorting'
 import Filtering from './Filtering'
 import Loader from '../Loader'
@@ -129,8 +128,7 @@ function useDomains({ domainType, address, sort, page, expiryDate }) {
       first: RESULTS_PER_PAGE,
       skip,
       orderBy: sort.type,
-      orderDirection: sort.direction,
-      expiryDate
+      orderDirection: sort.direction
     },
     skip: domainType !== 'registrant'
   })
@@ -170,7 +168,7 @@ export default function Address({
   let [showOriginBannerFlag, setShowOriginBannerFlag] = useState(true)
   let [etherScanAddr, setEtherScanAddr] = useState(null)
   let [activeSort, setActiveSort] = useState({
-    type: 'expiryDate',
+    type: 'registrationDate',
     direction: 'asc'
   })
   let [checkedBoxes, setCheckedBoxes] = useState({})
@@ -280,20 +278,20 @@ export default function Address({
             url={url}
           />
 
-          {domainType === 'registrant' && (
-            <RenewAll
-              years={years}
-              setYears={setYears}
-              activeFilter={domainType}
-              selectedNames={selectedNames}
-              setCheckedBoxes={setCheckedBoxes}
-              setSelectAll={setSelectAll}
-              allNames={allNames}
-              address={address}
-              data={data}
-              refetch={refetch}
-            />
-          )}
+          {/*{domainType === 'registrant' && (*/}
+          {/*  <RenewAll*/}
+          {/*    years={years}*/}
+          {/*    setYears={setYears}*/}
+          {/*    activeFilter={domainType}*/}
+          {/*    selectedNames={selectedNames}*/}
+          {/*    setCheckedBoxes={setCheckedBoxes}*/}
+          {/*    setSelectAll={setSelectAll}*/}
+          {/*    allNames={allNames}*/}
+          {/*    address={address}*/}
+          {/*    data={data}*/}
+          {/*    refetch={refetch}*/}
+          {/*  />*/}
+          {/*)}*/}
           <Sorting
             activeSort={activeSort}
             setActiveSort={setActiveSort}

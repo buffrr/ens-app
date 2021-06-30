@@ -216,7 +216,7 @@ class Explainer extends Component {
           ))}
         </div>
         <div className="hook">
-          <p>total.badass</p>
+          <p>yourname.forever</p>
         </div>
       </BaseContainer>
     )

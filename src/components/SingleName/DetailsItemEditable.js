@@ -276,6 +276,7 @@ function getInputType(
     )
   }
   const ensAddress = getEnsAddress()
+
   const provider =
     process.env.REACT_APP_STAGE === 'local'
       ? 'http://localhost:8545'

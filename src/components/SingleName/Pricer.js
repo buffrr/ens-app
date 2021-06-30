@@ -9,16 +9,7 @@ import mq from 'mediaQuery'
 
 import { ReactComponent as ChainDefault } from '../Icons/chain.svg'
 
-const PricingContainer = styled('div')`
-  display: grid;
-  grid-template-columns: 1fr;
-  margin-bottom: 20px;
-  ${mq.medium`
-    grid-template-columns:
-      minmax(min-content, 200px) minmax(min-content, min-content)
-      minmax(200px, 1fr);
-  `}
-`
+const PricingContainer = styled('div')``
 const Chain = styled(ChainDefault)`
   display: none;
 
@@ -48,8 +39,8 @@ function PricerInner({
   return (
     <>
       <PricingContainer className={className} ref={reference}>
-        <Years years={years} setYears={setYears} />
-        <Chain />
+        {/*<Years years={years} setYears={setYears} />*/}
+        {/*<Chain />*/}
         <Price
           price={price}
           gasPrice={gasPrice}

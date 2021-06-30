@@ -141,18 +141,6 @@ function getCTA({
         onCompleted={data => {
           const txHash = Object.values(data)[0]
           setTxHash(txHash)
-          if (ethUsdPrice) {
-            // this is not set on local test env
-            trackReferral({
-              transactionId: txHash,
-              labels: [label],
-              type: 'register', // renew/register
-              price: new EthVal(`${price._hex}`)
-                .toEth()
-                .mul(ethUsdPrice)
-                .toFixed(2) // in wei, // in wei
-            })
-          }
           incrementStep()
         }}
       >

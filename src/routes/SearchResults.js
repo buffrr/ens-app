@@ -43,7 +43,7 @@ class Results extends React.Component {
         parsed
       })
     }
-    document.title = `.badass Search: ${searchTerm}`
+    document.title = `.forever Search: ${searchTerm}`
 
     if (type === 'unsupported') {
       this.setState({

@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import styled from '@emotion/styled/macro'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import warning from '../assets/whiteWarning.svg'
 import { GET_REVERSE_RECORD } from 'graphql/queries'
 import { SET_ERROR } from 'graphql/mutations'
 import mq from 'mediaQuery'
@@ -315,7 +314,7 @@ export default ({ match }) => {
     try {
       network = await connect()
     } catch (e) {
-      setError({ variables: { message: e.message } })
+      setError({ variables: { message: e && e.message } })
     }
     if (network) {
       switchNetwork(network.chainId)
@@ -362,7 +361,7 @@ export default ({ match }) => {
         </HeroTop>
         <SearchContainer>
           <>
-            <H1>.badass domains</H1>
+            <H1>.forever domains</H1>
             <PermanentRegistrarLogo
               initial={animation.initial}
               animate={animation.animate}
@@ -380,11 +379,10 @@ export default ({ match }) => {
               {t('home.whatisens.title')}
             </H2>
             <p>
-              .badass is a top-level domain on the{' '}
+              .forever is a top-level domain on the{' '}
               <a href="https://handshake.org">Handshake blockchain</a>. We have
-              forked <a href="https://ens.domains/">ENS</a> to create the first
-              truly decentralized subdomains grounded in a decentralized root
-              zone.
+              forked <a href="https://ens.domains/">ENS</a> to create truly
+              decentralized subdomains grounded in a decentralized root zone.
             </p>
             <ExternalButtonLink href={aboutPageURL()}>
               {t('c.learnmore')}
