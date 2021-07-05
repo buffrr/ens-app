@@ -59,10 +59,9 @@
     "slugify": "^1.4.6",
     "stackdriver-errors-js": "^0.8.0",
     "web3": "^1.3.0",
-    "web3modal": "^1.9.1"
+    "web3modal-dynamic-import": "1.10.1"
   },
   "scripts": {
-    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
     "start:ipfs": "REACT_APP_IPFS=True PUBLIC_URL='.' yarn start",
     "start:test": "REACT_APP_STAGE=local yarn start",
@@ -91,7 +90,8 @@
     "deploy:test": "REACT_APP_STAGE=production rm -rf build/ && npm run build && npm run postbuild && surge build badasstester.surge.sh",
     "deploy": "npm run build && npm run postbuild && surge build app.ens.domains",
     "i18n": "sync-i18n --files 'public/locales/*.json' --primary en --languages cn --space 2",
-    "check-i18n": "npm run i18n -- --check"
+    "check-i18n": "npm run i18n -- --check",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "prettier": {
     "semi": false,

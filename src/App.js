@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useState } from 'react'
+import React, { Fragment, useContext, useEffect, useState, lazy } from 'react'
 import {
   HashRouter,
   BrowserRouter,
@@ -9,14 +9,15 @@ import { Query } from 'react-apollo'
 
 import { GET_ERRORS } from './graphql/queries'
 
-import TestRegistrar from './routes/TestRegistrar'
-import Home from './routes/Home'
-import SearchResults from './routes/SearchResults'
-import SingleName from './routes/SingleName'
-import Favourites from './routes/Favourites'
-import Faq from './routes/Faq'
-import Address from './routes/AddressPage'
-import Renew from './routes/Renew'
+const TestRegistrar = lazy(() => import('./routes/TestRegistrar'))
+
+const Home = lazy(() => import('./routes/Home'))
+const SearchResults = lazy(() => import('./routes/SearchResults'))
+const SingleName = lazy(() => import('./routes/SingleName'))
+const Favourites = lazy(() => import('./routes/Favourites'))
+const Faq = lazy(() => import('./routes/Faq'))
+const Address = lazy(() => import('./routes/AddressPage'))
+const Renew = lazy(() => import('./routes/Renew'))
 import Modal from './components/Modal/Modal'
 import Confirm from './components/SingleName/Confirm'
 import { NetworkError, Error404 } from './components/Error/Errors'
